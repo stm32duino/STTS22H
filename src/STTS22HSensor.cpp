@@ -325,8 +325,15 @@ STTS22HStatusTypeDef STTS22HSensor::GetTemperatureLimitStatus(uint8_t *HighLimit
     return STTS22H_ERROR;
   }
 
-  *HighLimit = status.over_thh;
-  *LowLimit = status.under_thl;
+  if(HighLimit)
+  {
+    *HighLimit = status.over_thh;
+  }
+
+  if(LowLimit)
+  {
+    *LowLimit = status.under_thl;
+  }
 
   return STTS22H_OK;
 }
