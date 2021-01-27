@@ -52,31 +52,54 @@ STTS22HSensor::STTS22HSensor(TwoWire *i2c, uint8_t address) : dev_i2c(i2c), addr
   reg_ctx.write_reg = STTS22H_io_write;
   reg_ctx.read_reg = STTS22H_io_read;
   reg_ctx.handle = (void *)this;
+  temp_is_enabled = 0U;
+}
 
+/**
+ * @brief  Configure the sensor in order to be used
+ * @retval 0 in case of success, an error code otherwise
+ */
+STTS22HStatusTypeDef STTS22HSensor::begin()
+{
   /* Set default ODR */
   temp_odr = 1.0f;
 
   /* Enable BDU */
   if(stts22h_block_data_update_set(&reg_ctx, PROPERTY_ENABLE) != STTS22H_OK)
   {
-    return;
+    return STTS22H_ERROR;
   }
 
   /* Enable Automatic Address Increment */
   if(stts22h_auto_increment_set(&reg_ctx, PROPERTY_ENABLE) != STTS22H_OK)
   {
-    return;
+    return STTS22H_ERROR;
   }
 
   /* Put the component in standby mode. */
   if (stts22h_temp_data_rate_set(&reg_ctx, STTS22H_POWER_DOWN) != STTS22H_OK)
   {
-    return;
+    return STTS22H_ERROR;
   }
   
-  temp_is_enabled = 0;
-  
-  return;
+  temp_is_enabled = 0U;
+
+  return STTS22H_OK;
+}
+
+/**
+ * @brief  Disable the sensor and relative resources
+ * @retval 0 in case of success, an error code otherwise
+ */
+STTS22HStatusTypeDef STTS22HSensor::end()
+{
+  /* Disable temperature sensor */
+  if (Disable() != STTS22H_OK)
+  {
+    return STTS22H_ERROR;
+  }
+
+  return STTS22H_OK;
 }
 
 /**
@@ -116,7 +139,7 @@ STTS22HStatusTypeDef STTS22HSensor::Enable()
     return STTS22H_ERROR;
   }
 
-  temp_is_enabled = 1;
+  temp_is_enabled = 1U;
 
   return STTS22H_OK;
 }
@@ -145,7 +168,7 @@ STTS22HStatusTypeDef STTS22HSensor::Disable()
     return STTS22H_ERROR;
   }
 
-  temp_is_enabled = 0;
+  temp_is_enabled = 0U;
 
   return STTS22H_OK;
 }
