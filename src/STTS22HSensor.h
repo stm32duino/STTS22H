@@ -69,6 +69,8 @@ class STTS22HSensor
 {
   public:
     STTS22HSensor(TwoWire *i2c, uint8_t address=STTS22H_I2C_ADD_H);
+    STTS22HStatusTypeDef begin();
+    STTS22HStatusTypeDef end();
     STTS22HStatusTypeDef ReadID(uint8_t *Id);
     STTS22HStatusTypeDef Enable();
     STTS22HStatusTypeDef Disable();
