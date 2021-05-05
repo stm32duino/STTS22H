@@ -313,7 +313,7 @@ int32_t stts22h_temperature_raw_get(stts22h_ctx_t *ctx, int16_t *buff)
 
 /**
   * @defgroup    STTS22H_Common
-  * @brief       This section groups common usefull functions.
+  * @brief       This section groups common useful functions.
   * @{
   *
   */
